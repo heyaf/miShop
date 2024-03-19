@@ -1,0 +1,31 @@
+name: mishop
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.6
+  get: 4.6.6
+  flutter_screenutil: ^5.5.4
+  flutter_swiper_view: ^1.1.8
+  dio: ^5.4.1
+  flutter: 
+    sdk: flutter
+
+dev_dependencies: 
+  flutter_lints: ^3.0.0
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  uses-material-design: true
+  fonts: 
+    - family: myIcons #指定一个字体名 
+      fonts: 
+        - asset: assets/font/iconfont.ttf
+  assets:
+      - assets/image/xiaomiBanner.png
+      - assets/image/2.0x/xiaomiBanner.png
+      - assets/image/3.0x/xiaomiBanner.png
