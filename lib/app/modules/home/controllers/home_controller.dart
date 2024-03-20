@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mishop/app/models/homeCatagoryModel.dart';
 import 'package:mishop/app/models/homebanner_model.dart';
+import 'package:mishop/app/models/homegoods_model.dart';
 // import '../../../../services/screenDefine.dart';
 
 class HomeController extends GetxController {
@@ -15,12 +16,13 @@ class HomeController extends GetxController {
   RxList<homeBannerItem> bannerlist = <homeBannerItem>[].obs;
   RxList<HomecatagoryItemmodel> homecatagoryList =
       <HomecatagoryItemmodel>[].obs;
-
+  RxList<homegoodsItem> homegoodsList = <homegoodsItem>[].obs;
   @override
   void onInit() {
     super.onInit();
     getBannerData();
     getCenterCatagory();
+    gethomegoodslist();
     scrollController.addListener(() {
       if (scrollController.position.pixels > 20) {
         if (ishiddenTop.value == false) {
@@ -58,6 +60,13 @@ class HomeController extends GetxController {
     var res = await Dio().get('https://miapp.itying.com/api/bestCate');
     var homeCatagory = Homecatagorymodel.fromJson(res.data);
     homecatagoryList.value = homeCatagory.result;
+    update();
+  }
+
+  gethomegoodslist() async {
+    var res = await Dio().get('https://miapp.itying.com/api/plist?is_best=1');
+    var Homegoodslist = Homegoods.fromJson(res.data);
+    homegoodsList.value = Homegoodslist.result;
     update();
   }
 }

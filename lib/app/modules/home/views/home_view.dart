@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:mishop/app/models/homegoods_model.dart';
 import 'package:mishop/services/myIcon.dart';
 
 import '../../../../services/keepAliveWrapper.dart';
@@ -101,14 +103,14 @@ class HomeView extends GetView<HomeController> {
         bottom: 0,
         child: ListView.builder(
             controller: controller.scrollController, //绑定controller
-            itemCount: 20,
+            itemCount: 3,
             itemBuilder: (context, index) {
               if (index == 0) {
                 return _banner();
               } else if (index == 1) {
                 return _homecenterCatagory();
               } else {
-                return ListTile(title: Text("第$index个列表"));
+                return _goodsList();
               }
             }));
   }
@@ -217,5 +219,74 @@ class HomeView extends GetView<HomeController> {
         )
       ]),
     );
+  }
+
+  //goodsList
+  Widget _goodsList() {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            width: ScreenAdapter.getScreenWidth(),
+            padding: EdgeInsets.all(ScreenAdapter.width(20)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "优惠商品",
+                  style: TextStyle(fontSize: ScreenAdapter.fontSize(50)),
+                ),
+                Text('更多优惠 >')
+              ],
+            ),
+          ),
+          Container(
+              padding: EdgeInsets.all(ScreenAdapter.width(20)),
+              child: Obx(
+                () => MasonryGridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: ScreenAdapter.width(20),
+                  crossAxisSpacing: ScreenAdapter.width(20),
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.homegoodsList.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return goodsWidget(controller.homegoodsList[index]);
+                  },
+                ),
+              ))
+        ],
+      ),
+    );
+  }
+
+  Widget goodsWidget(homegoodsItem item) {
+    var imageUrl =
+        "https://xiaomi.itying.com/${item.pic}".replaceAll("\\", "/");
+    return Container(
+      // height: 50 + 150 * Random().nextDouble(),
+      child: Column(
+        children: [
+          Image.network(
+            imageUrl,
+            fit: BoxFit.fill,
+          ),
+          Text(item.title),
+          Text(item.subTitle),
+          Text("${item.price}")
+        ],
+      ),
+    );
+  }
+
+  Color randomColor() {
+    final Random random = Random();
+    // 生成随机的红色、绿色、蓝色和透明度值
+    final int r = random.nextInt(255);
+    final int g = random.nextInt(255);
+    final int b = random.nextInt(255);
+    final int a = 255; // 完全不透明
+    // 使用上面生成的值创建一个颜色对象
+    return Color.fromARGB(a, r, g, b);
   }
 }
