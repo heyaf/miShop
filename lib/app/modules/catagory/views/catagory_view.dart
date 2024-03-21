@@ -18,13 +18,17 @@ class CatagoryView extends GetView<CatagoryController> {
               child: Container(
                   width: double.infinity,
                   height: double.infinity,
-                  child: GridView.builder(
+                  child: Obx(() => GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
                           childAspectRatio: 24 / 34),
+                      itemCount: controller.rightCategoryList.length,
                       itemBuilder: ((context, index) {
+                        var url = controller.rightCategoryList[index].pic;
+                        String img = "https://xiaomi.itying.com/$url"
+                            .replaceAll('\\', '/');
                         return Column(children: [
                           Container(
                             width: ScreenAdapter.width(200),
@@ -32,15 +36,15 @@ class CatagoryView extends GetView<CatagoryController> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: Image.network(
-                                'https://picsum.photos/200/300',
+                                img,
                                 fit: BoxFit.fill,
                               ),
                             ),
                           ),
                           SizedBox(height: ScreenAdapter.height(20)),
-                          Text('第${index + 1}行')
+                          Text('${controller.rightCategoryList[index].title}')
                         ]);
-                      }))),
+                      })))),
             ),
           ],
         ));
@@ -96,7 +100,7 @@ class CatagoryView extends GetView<CatagoryController> {
       height: double.infinity,
       color: Color.fromRGBO(246, 246, 246, 1),
       child: ListView.builder(
-        itemCount: 20,
+        itemCount: controller.leftCategoryList.length,
         itemBuilder: (BuildContext context, int index) {
           return Obx(() => InkWell(
               onTap: () {
@@ -116,7 +120,9 @@ class CatagoryView extends GetView<CatagoryController> {
                     ),
                     Expanded(
                         flex: 1,
-                        child: Text(textAlign: TextAlign.center, "第$index行"))
+                        child: Text(
+                            textAlign: TextAlign.center,
+                            "${controller.leftCategoryList[index].title}"))
                   ],
                 ),
               )));

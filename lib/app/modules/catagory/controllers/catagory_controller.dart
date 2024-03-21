@@ -8,11 +8,12 @@ class CatagoryController extends GetxController {
   //TODO: Implement CatagoryController
 
   RxInt selectIndex = 0.obs;
-   RxList<CategoryItemModel> leftCategoryList = <CategoryItemModel>[].obs;
+  RxList<CategoryItemModel> leftCategoryList = <CategoryItemModel>[].obs;
   RxList<CategoryItemModel> rightCategoryList = <CategoryItemModel>[].obs;
   @override
   void onInit() {
     super.onInit();
+    getLeftCategoryData();
   }
 
   @override
@@ -27,10 +28,16 @@ class CatagoryController extends GetxController {
 
   void updateIndex(int index) {
     selectIndex.value = index;
+    print(index);
+    print(leftCategoryList.length);
+    if (leftCategoryList.length >= index) {
+      print(leftCategoryList[index].sId);
+      getRightCategoryData(leftCategoryList[index].sId!);
+    }
     update();
   }
 
-   getLeftCategoryData() async {
+  getLeftCategoryData() async {
     var response = await Dio().get("https://miapp.itying.com/api/pcate");
     var category = CategoryModel.fromJson(response.data);
     leftCategoryList.value = category.result!;
@@ -43,6 +50,7 @@ class CatagoryController extends GetxController {
         await Dio().get("https://miapp.itying.com/api/pcate?pid=$pid");
     var category = CategoryModel.fromJson(response.data);
     rightCategoryList.value = category.result!;
+    print(rightCategoryList);
     update();
   }
 }
